@@ -36,6 +36,11 @@ import parabond.mongo.MongoConnection
 import parabond.value.SimpleBondValuator
 import parabond.util.Helper
 
+object Par00 {
+  def main(args: Array[String]): Unit = {
+    new Par00 test
+  }
+}
 
 /**
  * This class uses parallel collections to price n portfolios in the
