@@ -34,6 +34,12 @@ import parabond.mongo.MongoHelper
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 
+object NPortfolio100 {
+  def main(args: Array[String]): Unit = {
+    new NPortfolio00 test
+  }
+}
+
 /**
  * This class implements the composite serial algorithm.
  * @author Ron Coleman, Ph.D.

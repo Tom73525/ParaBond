@@ -144,8 +144,6 @@ object MongoHelper {
     val cursor = results.iterator
     
     if (cursor.hasNext) {
-      println("query successful")
-
       val value = cursor.next().get(field)
 
       value match {

@@ -58,7 +58,7 @@ class Par00 {
   val ran = new Random(0)   
   
   /** Write a detailed report */
-  val details = false
+  val details = true
   
   def test {
     // Set the number of portfolios to analyze
