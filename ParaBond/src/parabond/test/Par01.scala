@@ -21,9 +21,6 @@ import parabond.value.SimpleBondValuator
 class Par01 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -134,13 +131,11 @@ class Par01 {
    * is inherently serial
    */
   def loadPortfsParFoldLeft(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
     val lotteries = for(i <- 0 to n) yield ran.nextInt(100000)+1 
     
     val list = lotteries.par.foldLeft (List[Data]())
     { (portfIdBonds,portfId) =>
-      val intermediate = MongoHelper.fetchBonds(portfId,portfsCollection)
+      val intermediate = MongoHelper.fetchBonds(portfId)
       
       Data(portfId,intermediate.list,null) :: portfIdBonds
     }
@@ -151,9 +146,7 @@ class Par01 {
   /**
    * Parallel load the portfolios with embedded bonds.
    */
-  def loadPortfsParFold(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsParFold(n: Int): List[Data] = {    
     // Initialize the portfolios to retrieve
     val portfs = for(i <- 0 until n) yield Data(ran.nextInt(100000)+1,null,null) 
     
@@ -175,7 +168,7 @@ class Par01 {
         
         // If b is a Data instance, fetch the bonds and append them to the data list
         case data : Data =>
-          val bonds = MongoHelper.fetchBonds(data.id, portfsCollection) 
+          val bonds = MongoHelper.fetchBonds(data.id) 
           
           List(Data(data.id,bonds.list,null)) ++ opa
       }         
@@ -198,8 +191,6 @@ class Par01 {
   def loadPortfsWithActors(n : Int) : ListBuffer[Data] = {
     import scala.actors._
     import Actor._
-    
-    val portfsCollection = mongo("Portfolios")
 
     val caller = self
       
@@ -209,7 +200,7 @@ class Par01 {
       val lottery = ran.nextInt(100000) + 1
       
       actor {
-        caller ! MongoHelper.fetchBonds(lottery, portfsCollection)
+        caller ! MongoHelper.fetchBonds(lottery)
       }
     }
 

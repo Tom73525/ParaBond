@@ -17,9 +17,6 @@ import parabond.value.SimpleBondValuator
 class Par06 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -38,11 +35,11 @@ class Par06 {
     
     val n = if(arg == null) PORTF_NUM else arg.toInt
     
-    var me =  this.getClass().getSimpleName()
-    var outFile = me + "-dat.txt"
+    val me =  this.getClass().getSimpleName()
+    val outFile = me + "-dat.txt"
     
-    var fos = new java.io.FileOutputStream(outFile,true)
-    var os = new java.io.PrintStream(fos)
+    val fos = new java.io.FileOutputStream(outFile,true)
+    val os = new java.io.PrintStream(fos)
     
     os.print(me+" "+ "N: "+n+" ")
     
@@ -137,9 +134,7 @@ class Par06 {
    * Parallel load the portfolios with embedded bonds.
    * Note: This version uses parallel fold to reduce all the
    */
-  def loadPortfsParFold(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsParFold(n: Int): List[Data] = {  
     // Initialize the portfolios to retrieve
     val portfs = for(i <- 0 until n) yield Data(ran.nextInt(100000)+1,null,null) 
     
@@ -160,7 +155,7 @@ class Par06 {
         
         // If b is a data, append the data to the list
         case x : Data =>
-          val intermediate = MongoHelper.fetchBonds(x.portfId, portfsCollection) 
+          val intermediate = MongoHelper.fetchBonds(x.portfId) 
           
           List(Data(x.portfId,intermediate.list,null)) ++ opa
       }         

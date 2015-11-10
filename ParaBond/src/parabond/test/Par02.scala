@@ -20,9 +20,6 @@ import scala.collection.mutable.ListBuffer
 class Par02 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -115,14 +112,12 @@ class Par02 {
   /**
    * Parallel load the portfolios with embedded bonds.
    */
-  def loadPortfsPar(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsPar(n: Int): List[Data] = {   
     val lotteries = for(i <- 0 to n) yield ran.nextInt(100000)+1 
     
     val list = lotteries.par.foldLeft (List[Data]())
     { (portfIdBonds,portfId) =>
-      val intermediate = MongoHelper.fetchBonds(portfId,portfsCollection)
+      val intermediate = MongoHelper.fetchBonds(portfId)
       
       Data(portfId,intermediate.list,null) :: portfIdBonds
     }
@@ -137,8 +132,6 @@ class Par02 {
   def loadPortfsPar2(n : Int) : ListBuffer[Data] = {
     import scala.actors._
     import Actor._
-    
-    val portfsCollection = mongo("Portfolios")
 
     val caller = self
       
@@ -148,7 +141,7 @@ class Par02 {
       val lottery = ran.nextInt(100000) + 1
       
       actor {
-        caller ! MongoHelper.fetchBonds(lottery, portfsCollection)
+        caller ! MongoHelper.fetchBonds(lottery)
       }
     }
 

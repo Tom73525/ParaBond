@@ -17,9 +17,6 @@ import com.mongodb.client.MongoCursor
 class Par04 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -92,10 +89,7 @@ class Par04 {
     println(me+" DONE! %d %7.4f".format(n,dtN))      
   }
   
-  def priced(inputs: List[Data]) : List[Data] = {
-    // Connect to the portfolio collection
-    val portfsCollecton = mongo("Portfolios")
-    
+  def priced(inputs: List[Data]) : List[Data] = {   
     val outputs = inputs.foldLeft(List[Data]()) { (xs, x) =>
       val t0 = System.nanoTime
       
@@ -103,20 +97,17 @@ class Par04 {
       
       val portfsQuery = MongoDbObject("id" -> portfId)
 
-      val portfsCursor = portfsCollecton.find(portfsQuery)
+      val portfsCursor = MongoHelper.portfCollection.find(portfsQuery)
     
       // Get the bonds ids in the portfolio
       val bondIds = MongoHelper.asList(portfsCursor,"instruments")
-    
-      // Connect to the bonds collection
-      val bondsCollection = mongo("Bonds")
     
       // Price each bond and sum all the prices
       val value = bondIds.foldLeft(0.0) { (sum, id) =>
         // Get the bond from the bond collection
         val bondQuery = MongoDbObject("id" -> id)
 
-        val bondCursor = bondsCollection.find(bondQuery)
+        val bondCursor = MongoHelper.bondCollection.find(bondQuery)
 
         val bond = MongoHelper.asBond(bondCursor)
       

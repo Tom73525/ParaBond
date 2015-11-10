@@ -16,9 +16,6 @@ import scala.util.Random
 class Par03 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -37,11 +34,11 @@ class Par03 {
     
     val n = if(arg == null) PORTF_NUM else arg.toInt
     
-    var me =  this.getClass().getSimpleName()
-    var outFile = me + "-dat.txt"
+    val me =  this.getClass().getSimpleName()
+    val outFile = me + "-dat.txt"
     
-    var fos = new java.io.FileOutputStream(outFile,true)
-    var os = new java.io.PrintStream(fos)
+    val fos = new java.io.FileOutputStream(outFile,true)
+    val os = new java.io.PrintStream(fos)
     
     os.print(me+" "+ "N: "+n+" ")
     
@@ -100,18 +97,12 @@ class Par03 {
     // Value each bond in the portfolio
     val t0 = System.nanoTime
     
-    // Connect to the portfolio collection
-    val portfsCollecton = mongo("Portfolios")
-    
     // Retrieve the portfolio 
     val portfId = input.portfId
     
     val portfsQuery = MongoDbObject("id" -> portfId)
 
-    val portfsCursor = portfsCollecton.find(portfsQuery)
-    
-    // Connect to the bonds collection
-    val bondsCollection = mongo("Bonds")
+    val portfsCursor = MongoHelper.portfCollection.find(portfsQuery)
     
     // Get the bonds in the portfolio
     val bids = MongoHelper.asList(portfsCursor,"instruments")
@@ -124,7 +115,7 @@ class Par03 {
       // Get the bond from the bond collection
       val bondQuery = MongoDbObject("id" -> bondId.portfId)
 
-      val bondCursor = bondsCollection.find(bondQuery)
+      val bondCursor = MongoHelper.bondCollection.find(bondQuery)
 
       val bond = MongoHelper.asBond(bondCursor)   
       

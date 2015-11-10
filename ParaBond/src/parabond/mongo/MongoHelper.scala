@@ -33,13 +33,18 @@ import parabond.entry.SimpleBond
 import scala.util.Random
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoCursor
+import scala.collection.mutable.ListBuffer
 
 object MongoHelper {
   /** Sets the mongo host */
   val host: String = getHost
   
   /** Connects to the parabond DB */
-  val mongo = MongoConnection(host)("parabond")  
+  val mongo = MongoConnection(host)("parabond") 
+  
+  val portfCollection = mongo("Portfolios")
+  
+  val bondCollection = mongo("Bonds")
   
   /** Initialize the random number generator */
   val ran = new Random(0)
@@ -66,14 +71,11 @@ object MongoHelper {
       // Get the bonds in the portfolio
       val bondIds = MongoHelper.asList(portfsCursor, "instruments")
 
-      // Connect to the bonds collection
-      val bondsCollection = mongo("Bonds")
-
       val bonds = bondIds.foldLeft(List[SimpleBond]()) { (bonds, id) =>
         // Get the bond from the bond collection
         val bondQuery = MongoDbObject("id" -> id)
 
-        val bondCursor = bondsCollection.find(bondQuery)
+        val bondCursor = bondCollection.find(bondQuery)
 
         val bond = MongoHelper.asBond(bondCursor)
 
@@ -104,34 +106,32 @@ object MongoHelper {
       val lottery = ran.nextInt(100000) + 1
       
       actor {
-        caller ! fetchBonds(lottery, portfsCollection)
+        caller ! fetchBonds(lottery)
       }
     }
 
-    var list = List[(Int, List[SimpleBond])]()
+    val list = ListBuffer[(Int, List[SimpleBond])]()
 
     (1 to n).foreach { p =>
       receive {
         case Intermediate(portfId, bonds) =>
-          list = list ++ List((portfId, bonds))
+          list.append((portfId, bonds))
       }
     }
 
-    list
+    list.toList
 
   }
   
   /**
    * Loads portfolios x bonds into memory
    */
-  def loadPortfsPar(n: Int): List[(Int,List[SimpleBond])] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsPar(n: Int): List[(Int,List[SimpleBond])] = {  
     val lotteries = for(i <- 0 to n) yield ran.nextInt(100000)+1 
     
     val list = lotteries.par.foldLeft (List[(Int,List[SimpleBond])]())
     { (portfIdBonds,portfId) =>
-      val intermediate = fetchBonds(portfId,portfsCollection)
+      val intermediate = fetchBonds(portfId)
       
       (portfId,intermediate.list) :: portfIdBonds
     }
@@ -189,7 +189,7 @@ object MongoHelper {
   /**
    * Fetches the bonds from the database.
    */
-  def fetchBonds(portfId: Int,portfCollection: MongoCollection[Document]): Intermediate = {
+  def fetchBonds(portfId: Int): Intermediate = {
       // Retrieve the portfolio 
       val portfsQuery = MongoDbObject("id" -> portfId)
       

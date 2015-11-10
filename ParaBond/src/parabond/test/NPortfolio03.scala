@@ -42,9 +42,6 @@ import parabond.value.SimpleBondValuator
 class NPortfolio03 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -58,11 +55,11 @@ class NPortfolio03 {
     
     val n = if(arg == null) PORTF_NUM else arg.toInt
     
-    var me =  this.getClass().getSimpleName()
-    var outFile = me + "-dat.txt"
+    val me =  this.getClass().getSimpleName()
+    val outFile = me + "-dat.txt"
     
-    var fos = new java.io.FileOutputStream(outFile,true)
-    var os = new java.io.PrintStream(fos)
+    val fos = new java.io.FileOutputStream(outFile,true)
+    val os = new java.io.PrintStream(fos)
     
     os.print(me+" "+ "N: "+n+" ")
     
@@ -154,14 +151,12 @@ class NPortfolio03 {
    * Parallel load the portfolios with embedded bonds.
    * @param n Number of portfolios to load
    */
-  def loadPortfsFoldLeft(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsFoldLeft(n: Int): List[Data] = {   
     val lotteries = for(i <- 0 until n) yield ran.nextInt(100000)+1 
     
     val list = lotteries.foldLeft (List[Data]())
     { (portfIdBonds,portfId) =>
-      val intermediate = MongoHelper.fetchBonds(portfId,portfsCollection)
+      val intermediate = MongoHelper.fetchBonds(portfId)
       
       Data(portfId,intermediate.list,null) :: portfIdBonds
     }

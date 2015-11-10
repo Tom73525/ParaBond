@@ -16,9 +16,6 @@ import parabond.mongo.MongoDbObject
 class Par07 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connects to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -37,11 +34,11 @@ class Par07 {
     
     val n = if(arg == null) PORTF_NUM else arg.toInt
     
-    var me =  this.getClass().getSimpleName()
-    var outFile = me + "-dat.txt"
+    val me =  this.getClass().getSimpleName()
+    val outFile = me + "-dat.txt"
     
-    var fos = new java.io.FileOutputStream(outFile,true)
-    var os = new java.io.PrintStream(fos)
+    val fos = new java.io.FileOutputStream(outFile,true)
+    val os = new java.io.PrintStream(fos)
     
     os.print(me+" "+ "N: "+n+" ")
     
@@ -95,10 +92,7 @@ class Par07 {
     println(me+" DONE! %d %7.4f".format(n,dtN))      
   }
   
-  def price(inputs: List[Data]) : List[Data] = {
-    // Connect to the portfolio collection
-    val portfsCollecton = mongo("Portfolios")
-    
+  def price(inputs: List[Data]) : List[Data] = {   
     val outputs = inputs.foldLeft(List[Data]()) { (xs, input) =>
       val t0 = System.nanoTime
     
@@ -127,10 +121,7 @@ class Par07 {
     outputs
   }  
   
-  def loadChunk(inputs: List[Data]) : List[Data] = {
-     // Connect to the portfolio collection
-    val portfsCollecton = mongo("Portfolios")
-    
+  def loadChunk(inputs: List[Data]) : List[Data] = {   
     val outputs = inputs.foldLeft(List[Data]()) { (xs, input) =>
       val t0 = System.nanoTime
       
@@ -138,20 +129,17 @@ class Par07 {
       
       val portfsQuery = MongoDbObject("id" -> portfId)
 
-      val portfsCursor = portfsCollecton.find(portfsQuery)
+      val portfsCursor = MongoHelper.portfCollection.find(portfsQuery)
     
       // Get the bonds ids in the portfolio
       val bondIds = MongoHelper.asList(portfsCursor,"instruments")
-    
-      // Connect to the bonds collection
-      val bondsCollection = mongo("Bonds")
     
       // Price each bond and sum all the prices
       val bonds = bondIds.foldLeft(List[SimpleBond]()) { (list, id) =>
         // Get the bond from the bond collection
         val bondQuery = MongoDbObject("id" -> id)
 
-        val bondCursor = bondsCollection.find(bondQuery)
+        val bondCursor = MongoHelper.bondCollection.find(bondQuery)
 
         val bond = MongoHelper.asBond(bondCursor)
         
@@ -168,9 +156,7 @@ class Par07 {
    * Parallel load the portfolios with embedded bonds.
    * Note: This version uses parallel fold to reduce all the
    */
-  def loadPortfsParFold(n: Int): List[Data] = {
-    val portfsCollection = mongo("Portfolios")
-    
+  def loadPortfsParFold(n: Int): List[Data] = {    
     // Initialize the portfolios to retrieve
     val portfs = for(i <- 0 until n) yield Data(ran.nextInt(100000)+1,null,null) 
     
@@ -191,7 +177,7 @@ class Par07 {
         
         // If b is a data, append the data to the list
         case x : Data =>
-          val intermediate = MongoHelper.fetchBonds(x.portfId, portfsCollection) 
+          val intermediate = MongoHelper.fetchBonds(x.portfId) 
           
           List(Data(x.portfId,intermediate.list,null)) ++ opa
       }         

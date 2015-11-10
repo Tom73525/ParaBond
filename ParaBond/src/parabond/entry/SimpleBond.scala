@@ -10,6 +10,7 @@ package parabond.entry
  * @param freq Frequency per year, e.g., 1 = yearly, 12 = monthly, etc.
  * @param tenor Tenor in years
  * @param maturity Amount due at maturity
+ * @param value Value of the bond
  */
 class SimpleBond(val id : Int, val coupon : Double, val freq : Int, val tenor : Double, val maturity : Double, value: Double) {
   def this(id: Int, coupon : Double, freq : Int, tenor : Double,  maturity : Double) = this(id,coupon,freq,tenor,maturity, 0.0)
