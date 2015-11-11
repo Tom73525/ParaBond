@@ -32,6 +32,7 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 import parabond.entry.SimpleBond
 import scala.util.Random
 import scala.collection.mutable.ListBuffer
+import parabond.util.Constant
 
 object MongoHelper {
   /** Sets the mongo host */
@@ -93,15 +94,13 @@ object MongoHelper {
   def loadPortfsParallel(n : Int) : List[(Int,List[SimpleBond])] = {
     import scala.actors._
     import Actor._
-    
-    val portfsCollection = mongo("Portfolios")
 
     val caller = self
       
     (1 to n).foreach { p =>
       
       // Select a portfolio
-      val lottery = ran.nextInt(100000) + 1
+      val lottery = ran.nextInt(Constant.NUM_PORTFOLIOS) + 1
       
       actor {
         caller ! fetchBonds(lottery)

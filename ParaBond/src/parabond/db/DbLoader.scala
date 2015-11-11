@@ -31,24 +31,13 @@ import scala.io.Source
 import parabond.casa.MongoDbObject
 import java.util.Calendar
 import java.util.Date
+import parabond.util.Constant
 
 /**
  * This object load bonds and portfolios into the databasea. The bond parameters and ids
  * are pre-generated and stored in the files, bonds.txt, and portfs.txt.
  */
 object DbLoader {
-  /** Portfolios collection name */
-  val COLL_PORTFOLIOS = "Portfolios"
-
-  /** Bonds collection name */
-  val COLL_BONDS = "Bonds"
-
-  /** Bonds input data */
-  val INPUT_BONDS = "bonds.txt"
-
-  /** Portfolio input data */
-  val INPUT_PORTFS = "portfs.txt"
-
   /** Create DB Connection which is the IP address of DB server and database name */
   val mongodb = MongoConnection("127.0.0.1")("parabond")
 
@@ -62,14 +51,14 @@ object DbLoader {
   def loadBonds: Unit = {
 
     // Connects to Bonds collection
-    val mongo = mongodb(COLL_BONDS)
+    val mongo = mongodb(Constant.COLL_BONDS_NAME)
 
     // Dropping the collection to recreate with fresh data
     mongo.drop()
     
     // Loop through input data file, convert each record to a mongo object,
     // and store in mongo
-    for (record <- Source.fromFile(INPUT_BONDS).getLines()) {      
+    for (record <- Source.fromFile(Constant.INPUT_BONDS_FILENAME).getLines()) {      
       // Get the record details of a bond
       val details = record.split(",");
       
@@ -83,21 +72,21 @@ object DbLoader {
     }
     
     // Print the current size of Bond Collection in DB
-    println(mongo.count + " documents inserted into collection: "+COLL_BONDS)    
+    println(mongo.count + " documents inserted into collection: "+Constant.COLL_BONDS_NAME)    
   }
   
   /** Loads portfolios into the database from the INPUT_PORTFS file */
   def loadPortfolios() = {
 
     // Connects to Portfolio collection
-    val mongo = mongodb(COLL_PORTFOLIOS)
+    val mongo = mongodb(Constant.COLL_PORTFOLIOS_NAME)
 
     // Dropping it to recreate with fresh data
     mongo.drop()
 
     // Loop through input data file, convert each record to a mongo object,
     // and store in mongo
-    for (record <- Source.fromFile(INPUT_PORTFS).getLines()) {          
+    for (record <- Source.fromFile(Constant.INPUT_PORTFS_FILENAME).getLines()) {          
       val ids = record.split(" +").toList    
       
       val bondsIds = for (id <- ids) yield id.trim.toInt
@@ -112,7 +101,7 @@ object DbLoader {
     }
 
     // Print the current size of Bond Collection in DB
-    println(mongo.count + " documents inserted into collection: "+COLL_PORTFOLIOS)
+    println(mongo.count + " documents inserted into collection: "+Constant.COLL_PORTFOLIOS_NAME)
 
   }
 }
