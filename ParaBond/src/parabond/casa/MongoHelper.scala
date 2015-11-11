@@ -24,15 +24,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package parabond.mongo
+package parabond.casa
 
 import org.bson.Document
 import com.mongodb.client.FindIterable
 import scala.collection.JavaConverters.asScalaBufferConverter
 import parabond.entry.SimpleBond
 import scala.util.Random
-import com.mongodb.client.MongoCollection
-import com.mongodb.client.MongoCursor
 import scala.collection.mutable.ListBuffer
 
 object MongoHelper {
@@ -40,7 +38,7 @@ object MongoHelper {
   val host: String = getHost
   
   /** Connects to the parabond DB */
-  val mongo = MongoConnection(host)("parabond") 
+  val mongo = parabond.casa.MongoConnection(host)("parabond") 
   
   val portfCollection = mongo("Portfolios")
   

@@ -1,4 +1,4 @@
-package parabond.mongo
+package parabond.casa
 
 import org.bson.Document
 import scala.collection.JavaConverters.seqAsJavaListConverter

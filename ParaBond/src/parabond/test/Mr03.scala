@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Scaly Contributors
+ * Copyright (c) Ron Coleman
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@
 package parabond.test
 
 import parabond.mr.MapReduce
-import parabond.mongo.MongoHelper
+import parabond.casa.MongoHelper
 import parabond.entry.SimpleBond
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator

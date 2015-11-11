@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Scaly Contributors
+ * Copyright (c) Ron Coleman
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,15 +26,15 @@
  */
 package parabond.test
 
-import parabond.mongo.MongoHelper
-import parabond.mongo.MongoConnection
+import parabond.casa.MongoHelper
+import parabond.casa.MongoConnection
 import com.mongodb.client.MongoCursor
 import scala.util.Random
 import parabond.util.Result
 import parabond.util.Data
 import parabond.value.SimpleBondValuator
 import parabond.util.Helper
-import parabond.mongo.MongoDbObject
+import parabond.casa.MongoDbObject
 
 
 /**
@@ -44,9 +44,6 @@ import parabond.mongo.MongoDbObject
 class NPortfolio02 {
   /** Number of bond portfolios to analyze */
   val PORTF_NUM = 100
-        
-  /** Connect to the parabond DB */
-  val mongo = MongoConnection(MongoHelper.getHost)("parabond")
   
   /** Initialize the random number generator */
   val ran = new Random(0)   
@@ -131,28 +128,22 @@ class NPortfolio02 {
     // Value each bond in the portfolio
     val t0 = System.nanoTime
     
-    // Connect to the portfolio collection
-    val portfsCollecton = mongo("Portfolios")
-    
     // Retrieve the portfolio 
     val portfId = input.id
     
     val portfsQuery = MongoDbObject("id" -> portfId)
 
-    val portfsCursor = portfsCollecton.find(portfsQuery)
+    val portfsCursor = MongoHelper.portfCollection.find(portfsQuery)
     
     // Get the bonds ids in the portfolio
     val bondIds = MongoHelper.asList(portfsCursor,"instruments")
-    
-    // Connect to the bonds collection
-    val bondsCollection = mongo("Bonds")
     
     // Price each bond and sum all the prices
     val value = bondIds.foldLeft(0.0) { (sum, id) =>
       // Get the bond from the bond collection
       val bondQuery = MongoDbObject("id" -> id)
 
-      val bondCursor = bondsCollection.find(bondQuery)
+      val bondCursor = MongoHelper.bondCollection.find(bondQuery)
 
       val bond = MongoHelper.asBond(bondCursor)
       

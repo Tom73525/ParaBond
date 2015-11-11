@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Scaly Contributors
+ * Copyright (c) Ron Coleman
  * See CONTRIBUTORS.TXT for a full list of copyright holders.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,8 +28,8 @@ package parabond.test
 
 import scala.util.Random
 
-import parabond.mongo.MongoConnection
-import parabond.mongo.MongoHelper
+import parabond.casa.MongoConnection
+import parabond.casa.MongoHelper
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 

@@ -26,13 +26,13 @@
  */
 package parabond.test
 
-import parabond.mongo.MongoHelper
+import parabond.casa.MongoHelper
 import com.mongodb.client.MongoCursor
 import scala.util.Random
-import parabond.mongo.MongoDbObject
+import parabond.casa.MongoDbObject
 import parabond.util.Result
 import parabond.util.Data
-import parabond.mongo.MongoConnection
+import parabond.casa.MongoConnection
 import parabond.value.SimpleBondValuator
 import parabond.util.Helper
 

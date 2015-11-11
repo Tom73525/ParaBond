@@ -26,9 +26,9 @@
  */
 package parabond.db
 
-import parabond.mongo.MongoConnection
+import parabond.casa.MongoConnection
 import scala.io.Source
-import parabond.mongo.MongoDbObject
+import parabond.casa.MongoDbObject
 import java.util.Calendar
 import java.util.Date
 

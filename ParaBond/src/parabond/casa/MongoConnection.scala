@@ -1,4 +1,4 @@
-package parabond.mongo
+package parabond.casa
 
 import com.mongodb.MongoClient
 import java.util.logging.Level
