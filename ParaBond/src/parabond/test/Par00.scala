@@ -36,6 +36,7 @@ import parabond.casa.MongoConnection
 import parabond.value.SimpleBondValuator
 import parabond.util.Helper
 
+/** Test driver */
 object Par00 {
   def main(args: Array[String]): Unit = {
     new Par00 test

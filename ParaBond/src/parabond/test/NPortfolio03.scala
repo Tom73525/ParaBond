@@ -35,6 +35,13 @@ import parabond.util.Helper
 import parabond.util.Result
 import parabond.value.SimpleBondValuator
 
+/** Test driver */
+object NPortfolio103 {
+  def main(args: Array[String]): Unit = {
+    new NPortfolio00 test
+  }
+}
+
 /**
  * This class implements the memory-bound serial algorithm.
  * @author Ron Coleman, Ph.D.

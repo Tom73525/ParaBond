@@ -35,6 +35,12 @@ import com.mongodb.client.MongoCursor
 import scala.util.Random
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object Mr04 {
+  def main(args: Array[String]): Unit = {
+    new Mr04 test
+  }
+}
 
 /**
  * This class runs a map-reduce unit test for n portfolios in the

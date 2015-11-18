@@ -34,6 +34,10 @@ import scala.util.Random
 import scala.collection.mutable.ListBuffer
 import parabond.util.Constant
 
+/**
+ * This object implements monngo-specific helper functions.
+ * @author Ron Coleman
+ */
 object MongoHelper {
   /** Sets the mongo host */
   val host: String = getHost

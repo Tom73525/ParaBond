@@ -33,6 +33,13 @@ import parabond.casa.MongoHelper
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 
+/** Test driver */
+object Par06 {
+  def main(args: Array[String]): Unit = {
+    new Par06 test
+  }
+}
+
 /**
  * This class uses parallel collections to price n portfolios in the
  * parabond database using the fine-grain memory-bound algorithm.

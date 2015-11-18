@@ -36,6 +36,12 @@ import parabond.value.SimpleBondValuator
 import parabond.util.Helper
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object NPortfolio102 {
+  def main(args: Array[String]): Unit = {
+    new NPortfolio02 test
+  }
+}
 
 /**
  * This class implements the composite serial algorithm.

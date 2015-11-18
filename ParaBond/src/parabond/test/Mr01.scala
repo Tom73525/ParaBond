@@ -35,6 +35,13 @@ import parabond.mr.MapReduce
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 
+/** Test driver */
+object Mr01 {
+  def main(args: Array[String]): Unit = {
+    new Mr01 test
+  }
+}
+
 /**
  * This class runs a map-reduce unit test for n portfolios in the
  * parabond database. It uses one portfolio per actor.

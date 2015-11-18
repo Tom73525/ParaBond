@@ -35,6 +35,12 @@ import scala.util.Random
 import parabond.value.SimpleBondValuator
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object Mr05 {
+  def main(args: Array[String]): Unit = {
+    new Mr05 test
+  }
+}
 
 /**
  * This class runs a map-reduce unit test for n portfolios in the

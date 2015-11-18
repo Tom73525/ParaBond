@@ -33,6 +33,12 @@ import parabond.casa.MongoHelper
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 
+/** Test driver */
+object NPortfolio101 {
+  def main(args: Array[String]): Unit = {
+    new NPortfolio01 test
+  }
+}
 
 /**
  * This class implements the memory-bound serial algorithm.

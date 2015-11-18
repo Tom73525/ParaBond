@@ -35,6 +35,13 @@ import parabond.value.SimpleBondValuator
 import com.mongodb.client.MongoCursor
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object Mr06 {
+  def main(args: Array[String]): Unit = {
+    new Mr06 test
+  }
+}
+
 /**
  * This class runs a map-reduce unit test first loading the portfolios to memory.
  * @author Ron Coleman, Ph.D.

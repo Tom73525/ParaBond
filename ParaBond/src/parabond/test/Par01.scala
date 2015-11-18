@@ -35,9 +35,13 @@ import parabond.util.Helper
 import parabond.util.Result
 import parabond.value.SimpleBondValuator
 
-/**
- * @author Ron.Coleman
- */
+/** Test driver */
+object Par01 {
+  def main(args: Array[String]): Unit = {
+    new Par01 test
+  }
+}
+
 /**
  * This class uses parallel collections to price n portfolios in the
  * parabond database using the memory-bound "naive" algorithm.

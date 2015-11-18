@@ -35,6 +35,13 @@ import com.mongodb.client.MongoCursor
 import parabond.casa.MongoHelper
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object Mr00 {
+  def main(args: Array[String]): Unit = {
+    new Mr00 test
+  }
+}
+
 /**
  * This class runs a map-reduce unit test for n portfolios in the
  * parabond database. It uses one portfolio per actor for the first

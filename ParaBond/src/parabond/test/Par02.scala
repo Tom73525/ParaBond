@@ -36,6 +36,13 @@ import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 import scala.collection.mutable.ListBuffer
 
+/** Test driver */
+object Par02 {
+  def main(args: Array[String]): Unit = {
+    new Par02 test
+  }
+}
+
 /**
  * This class runs a parallel collections unit test for n portfolios in the
  * parabond database. It uses one portfolio per map by loading all the bonds

@@ -34,6 +34,13 @@ import scala.util.Random
 import parabond.value.SimpleBondValuator
 import parabond.casa.MongoDbObject
 
+/** Test driver */
+object Mr02 {
+  def main(args: Array[String]): Unit = {
+    new Mr02 test
+  }
+}
+
 /**
  * This class runs a map-reduce unit test for n portfolios in the
  * parabond database. It uses the coarse-gain method of n portfolio

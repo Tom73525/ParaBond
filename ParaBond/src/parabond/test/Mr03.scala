@@ -32,6 +32,13 @@ import parabond.entry.SimpleBond
 import parabond.util.Helper
 import parabond.value.SimpleBondValuator
 
+/** Test driver */
+object Mr03 {
+  def main(args: Array[String]): Unit = {
+    new Mr03 test
+  }
+}
+
 /**
  * This class runs a map-reduce unit test for n portfolios in the
  * parabond database. It first loads all referenced bonds to memory.

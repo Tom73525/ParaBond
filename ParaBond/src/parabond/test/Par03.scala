@@ -33,6 +33,13 @@ import parabond.value.SimpleBondValuator
 import parabond.casa.MongoDbObject
 import scala.util.Random
 
+/** Test driver */
+object Par03 {
+  def main(args: Array[String]): Unit = {
+    new Par03 test
+  }
+}
+
 /**
  * This class uses parallel collections to price n portfolios in the
  * parabond database using the fine-grain algorithm.
