@@ -58,6 +58,7 @@ class Par00 {
   /** Write a detailed report */
   val details = true
   
+  /** Runs the test */
   def test {
     // Set the number of portfolios to analyze
     val arg = System.getProperty("n")
