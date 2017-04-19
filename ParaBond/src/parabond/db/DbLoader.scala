@@ -26,11 +26,10 @@
  */
 package parabond.db
 
-import parabond.casa.MongoConnection
 import scala.io.Source
+
 import parabond.casa.MongoDbObject
-import java.util.Calendar
-import java.util.Date
+import parabond.casa.MongoHelper
 import parabond.util.Constant
 
 /**
@@ -39,7 +38,8 @@ import parabond.util.Constant
  */
 object DbLoader {
   /** Create DB Connection which is the IP address of DB server and database name */
-  val mongodb = MongoConnection("127.0.0.1")("parabond")
+  //val mongodb = MongoConnection("127.0.0.1")("parabond")
+  val mongodb = parabond.casa.MongoConnection(MongoHelper.host)("parabond") 
 
   /** Load bonds and portfolios */
   def main(args: Array[String]): Unit = {
